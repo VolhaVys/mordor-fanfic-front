@@ -1,0 +1,41 @@
+export const inputConfig = [
+  {
+    autoComplete: 'fname',
+    id: 'firstName',
+    label: 'First Name',
+    name: 'firstName',
+    sm: 6,
+    xs: 12,
+  },
+  {
+    autoComplete: 'lname',
+    id: 'lastName',
+    label: 'Last Name',
+    name: 'lastName',
+    sm: 6,
+    xs: 12,
+  },
+  {
+    autoComplete: 'email',
+    id: 'email',
+    label: 'Email Address',
+    name: 'email',
+    xs: 12,
+  },
+  {
+    autoComplete: 'current-password',
+    id: 'password',
+    label: 'Password',
+    name: 'password',
+    type: 'password',
+    xs: 12,
+  },
+  {
+    autoComplete: 'current-password',
+    id: 'repeatPassword',
+    label: 'Repeat Password',
+    name: 'repeatPassword',
+    type: 'password',
+    xs: 12,
+  },
+];
