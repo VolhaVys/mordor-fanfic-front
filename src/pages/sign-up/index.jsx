@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,13 +22,14 @@ const SignUp = () => {
   const { control, handleSubmit } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [error, setError] = useState('');
 
   const onSubmit = (data) => {
-    axios.post('http://localhost:3001/registration', data).then((response) => {
+    axios.post(`${process.env.REACT_APP_API_BASE}/registration`, data).then((response) => {
       dispatch(loginAction(response.data.token));
       history.push(DASHBOARD_ROUTE);
-    }).catch((error) => {
-      console.log(error);
+    }).catch((e) => {
+      setError(e.response?.data?.message ?? 'Server is temporarily unavailable');
     });
   };
 
@@ -63,6 +64,7 @@ const SignUp = () => {
                         name={cfg.name}
                         onChange={onChange}
                         required
+                        type={cfg.type ?? 'text'}
                         value={value}
                       />
                     )}
@@ -71,6 +73,7 @@ const SignUp = () => {
                 </Grid>
               ))}
             </Grid>
+            <p style={{ color: 'red' }}>{error}</p>
             <Button
               className={classes.submit}
               color="primary"

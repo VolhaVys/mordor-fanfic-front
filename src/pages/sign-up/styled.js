@@ -19,7 +19,6 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   container: {
-    background: 'linear-gradient(45deg,  rgba(66, 183, 245,0.8) 0%,rgba(66, 245, 189,0.4) 100%)',
     maxWidth: '100%',
     height: '100%',
   },

@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -21,16 +19,17 @@ import { loginAction } from '../../redux/actionCreators/actions';
 
 const SignIn = () => {
   const classes = useStyles();
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [error, setError] = useState('');
 
   const onSubmit = (data) => {
-    axios.post('http://localhost:3001/login', data).then((response) => {
+    axios.post(`${process.env.REACT_APP_API_BASE}/login`, data).then((response) => {
       dispatch(loginAction(response.data.token));
       history.push(DASHBOARD_ROUTE);
-    }).catch((error) => {
-      console.log(error);
+    }).catch((e) => {
+      setError(e.response?.data?.message ?? 'Server is temporarily unavailable');
     });
   };
 
@@ -63,16 +62,14 @@ const SignIn = () => {
                     name={cfg.name}
                     onChange={onChange}
                     required
+                    type={cfg.type ?? 'text'}
                     value={value}
                   />
                 )}
                 rules={{ required: 'First name required' }}
               />
             ))}
-            <FormControlLabel
-              control={<Checkbox color="primary" value="remember" />}
-              label="Remember me"
-            />
+            <p style={{ color: 'red' }}>{error}</p>
             <Button
               className={classes.submit}
               color="primary"
