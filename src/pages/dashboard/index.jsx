@@ -8,9 +8,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Grid from '@material-ui/core/Grid';
 import { useHistory } from 'react-router-dom';
-import getToken from '../../redux/selectors/selector';
+import { getToken } from '../../redux/selectors/selector';
 import { columns } from './config';
-import { LOGOUT } from '../../redux/actionCreators/actions';
+import { logoutAction } from '../../redux/actionCreators/actions';
 import { SIGN_IN_ROUTE } from '../../constant/routs';
 import { useStyles } from './styled';
 
@@ -24,12 +24,12 @@ const Dashboard = () => {
   const history = useHistory();
 
   const logout = () => {
-    dispatch({ type: LOGOUT });
+    dispatch(logoutAction());
     history.push(SIGN_IN_ROUTE);
   };
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_BASE}/user`, { headers: { Authorization: token } }).then((response) => {
+    axios.get(`${process.env.REACT_APP_API_BASE}/users`, { headers: { Authorization: token } }).then((response) => {
       setUsers(response.data.map((user) => {
         // eslint-disable-next-line no-underscore-dangle
         user.id = user._id;
@@ -45,7 +45,7 @@ const Dashboard = () => {
   }, []);
 
   const blockUsers = () => {
-    axios.put(`${process.env.REACT_APP_API_BASE}/user/block`,
+    axios.put(`${process.env.REACT_APP_API_BASE}/users/block`,
       selectedUserIDs, { headers: { Authorization: token } })
       .then((response) => {
         // eslint-disable-next-line no-underscore-dangle
@@ -64,8 +64,8 @@ const Dashboard = () => {
   };
 
   const deleteUsers = () => {
-    axios.post(`${process.env.REACT_APP_API_BASE}/user`,
-      selectedUserIDs, { headers: { Authorization: token } })
+    axios.delete(`${process.env.REACT_APP_API_BASE}/users`,
+      { headers: { Authorization: token }, data: selectedUserIDs })
       .then((response) => {
         // eslint-disable-next-line no-underscore-dangle
         setUsers(response.data.map((user) => {
@@ -83,7 +83,7 @@ const Dashboard = () => {
   };
 
   const unBlockUsers = () => {
-    axios.put(`${process.env.REACT_APP_API_BASE}/user/unblock`,
+    axios.put(`${process.env.REACT_APP_API_BASE}/users/unblock`,
       selectedUserIDs, { headers: { Authorization: token } })
       .then((response) => {
         setUsers(response.data.map((user) => {

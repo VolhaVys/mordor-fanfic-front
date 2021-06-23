@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStyles } from './styled';
-import { DASHBOARD_ROUTE, SIGN_IN_ROUTE } from '../../constant/routs';
+import { HOME_PAGE_ROUTE, SIGN_IN_ROUTE } from '../../constant/routs';
 import { inputConfig } from './config';
 import Input from '../../components/input';
 import { loginAction } from '../../redux/actionCreators/actions';
@@ -26,8 +26,8 @@ const SignUp = () => {
 
   const onSubmit = (data) => {
     axios.post(`${process.env.REACT_APP_API_BASE}/registration`, data).then((response) => {
-      dispatch(loginAction(response.data.token));
-      history.push(DASHBOARD_ROUTE);
+      dispatch(loginAction(response.data.token, response.data.user));
+      history.push(HOME_PAGE_ROUTE);
     }).catch((e) => {
       setError(e.response?.data?.message ?? 'Server is temporarily unavailable');
     });

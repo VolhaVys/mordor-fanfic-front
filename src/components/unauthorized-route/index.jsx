@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
-import getToken from '../../redux/selectors/selector';
+import { getToken } from '../../redux/selectors/selector';
 import { DASHBOARD_ROUTE } from '../../constant/routs';
 
 const UnauthorizedRoute = (props) => {
