@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import { SIGN_IN_ROUTE } from '../../constant/routs';
+import { SIGN_IN_ROUTE, USER_PAGE_ROUTE } from '../../constant/routs';
 import { getToken, getUserData } from '../../redux/selectors/selector';
 import { logoutAction } from '../../redux/actionCreators/actions';
 
@@ -22,11 +22,15 @@ const RenderUser = () => {
 
   const onLogout = () => {
     dispatch(logoutAction());
-    // history.go(0);
+    history.go(1);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onProfile = () => {
+    history.push(USER_PAGE_ROUTE);
   };
 
   const login = () => {
@@ -61,7 +65,7 @@ const RenderUser = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={onProfile}>Profile</MenuItem>
           <MenuItem onClick={onLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>

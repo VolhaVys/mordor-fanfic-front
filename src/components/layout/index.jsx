@@ -5,6 +5,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styled';
 import RenderUser from './config';
 
@@ -29,6 +30,9 @@ const Layout = ({ children }) => {
                 placeholder="Search…"
               />
             </div>
+            <Typography className={classes.title} noWrap variant="h6">
+              Мордор — техногенная цивилизация, опороченная победителями
+            </Typography>
             <div className={classes.grow} />
             <RenderUser />
           </Toolbar>

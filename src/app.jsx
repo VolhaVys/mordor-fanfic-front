@@ -6,12 +6,14 @@ import SignIn from './pages/sign-in';
 import SignUp from './pages/sign-up';
 import Dashboard from './pages/dashboard';
 import {
-  SIGN_UP_ROUTE, SIGN_IN_ROUTE, DASHBOARD_ROUTE, DEFAULT_ROUTE, HOME_PAGE_ROUTE,
+  SIGN_UP_ROUTE, SIGN_IN_ROUTE, DASHBOARD_ROUTE, DEFAULT_ROUTE, HOME_PAGE_ROUTE, NEW_FANFIC_PAGE_ROUTE, USER_PAGE_ROUTE,
 } from './constant/routs';
 import PrivateRoute from './components/private-route';
 import { store, persistor } from './redux/store';
 import UnauthorizedRoute from './components/unauthorized-route';
 import HomePage from './pages/home-page';
+import NewFanficPage from './pages/new-fanfic-page';
+import UserPage from './pages/user-page';
 
 const App = () => (
   <Provider store={store}>
@@ -23,6 +25,8 @@ const App = () => (
           <Route component={HomePage} exact path={HOME_PAGE_ROUTE} />
           <PrivateRoute component={Dashboard} exact path={DASHBOARD_ROUTE} />
           <PrivateRoute component={Dashboard} exact path={DEFAULT_ROUTE} />
+          <PrivateRoute component={NewFanficPage} exact path={NEW_FANFIC_PAGE_ROUTE} />
+          <PrivateRoute component={UserPage} exact path={USER_PAGE_ROUTE} />
         </Switch>
       </Router>
     </PersistGate>
