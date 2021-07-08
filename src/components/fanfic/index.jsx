@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import { useStyles } from '../fanfics-grid/styled';
 
 const Fanfic = ({
-  id, title, description, user: { firstName, lastName },
+  id, title, description, user: { id: userId, firstName, lastName },
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -106,13 +106,11 @@ Fanfic.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  userId: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
-  user: PropTypes.object,
-};
-
-Fanfic.defaultProps = {
-  user: { firstName: 'Volha', lastName: 'V' },
 };
 
 export default Fanfic;
