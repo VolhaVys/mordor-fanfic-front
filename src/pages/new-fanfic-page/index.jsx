@@ -54,6 +54,7 @@ const NewFanficPage = () => {
                   className={classes.input}
                   id={cfg.id}
                   label={cfg.label}
+                  multiline={cfg.multiline}
                   onChange={onChange}
                   required
                   select={cfg.select}

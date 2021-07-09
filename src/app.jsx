@@ -6,7 +6,13 @@ import SignIn from './pages/sign-in';
 import SignUp from './pages/sign-up';
 import Dashboard from './pages/dashboard';
 import {
-  SIGN_UP_ROUTE, SIGN_IN_ROUTE, DASHBOARD_ROUTE, DEFAULT_ROUTE, HOME_PAGE_ROUTE, NEW_FANFIC_PAGE_ROUTE, USER_PAGE_ROUTE,
+  SIGN_UP_ROUTE,
+  SIGN_IN_ROUTE,
+  DASHBOARD_ROUTE,
+  DEFAULT_ROUTE,
+  HOME_PAGE_ROUTE,
+  NEW_FANFIC_PAGE_ROUTE,
+  USER_PAGE_ROUTE,
 } from './constant/routs';
 import PrivateRoute from './components/private-route';
 import { store, persistor } from './redux/store';

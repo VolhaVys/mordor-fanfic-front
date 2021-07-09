@@ -38,6 +38,7 @@ export const inputs = [
     id: 'fanfic-description',
     label: 'Краткое описание',
     name: 'description',
+    multiline: 'multiline',
   },
   {
     id: 'fanfic-fandom',

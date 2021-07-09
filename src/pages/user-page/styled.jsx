@@ -8,4 +8,7 @@ export const useStyles = makeStyles((theme) => ({
     height: 400,
     width: '100%',
   },
+  margin: {
+    margin: theme.spacing(1),
+  },
 }));

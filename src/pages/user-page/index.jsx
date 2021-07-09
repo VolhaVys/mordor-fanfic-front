@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Tab from '@material-ui/core/Tab';
-import { DataGrid } from '@material-ui/data-grid';
 import AppBar from '@material-ui/core/AppBar';
 import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
@@ -8,12 +7,11 @@ import TabPanel from '@material-ui/lab/TabPanel';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { useHistory } from 'react-router-dom';
-import { columns } from './config';
 import Layout from '../../components/layout';
 import { useStyles } from './styled';
 import { getToken } from '../../redux/selectors/selector';
+import FanficsGrid from '../../components/fanfics-grid';
 import { NEW_FANFIC_PAGE_ROUTE } from '../../constant/routs';
 
 const UserPage = () => {
@@ -45,25 +43,7 @@ const UserPage = () => {
     });
   }, []);
 
-  const deleteFanfics = () => {
-    axios.delete(`${process.env.REACT_APP_API_BASE}/fanfics`,
-      { headers: { Authorization: token }, data: selectedFanficIDs })
-      .then((response) => {
-        // eslint-disable-next-line no-underscore-dangle
-        setFanfics(fanfics.filter((f) => !selectedFanficIDs.includes(f._id)));
-      }).catch((error) => {
-        console.error(error);
-        if (error.response?.status === 403) {
-          console.error(error);
-        }
-      });
-  };
-
-  const onSelect = (e) => {
-    setSelectedFanficIDs(e.selectionModel);
-  };
-
-  const addFanfic = () => {
+  const createFanfic = () => {
     history.push(NEW_FANFIC_PAGE_ROUTE);
   };
 
@@ -78,20 +58,10 @@ const UserPage = () => {
             </TabList>
           </AppBar>
           <TabPanel value="my-fanfics">
-            <div className={classes.table}>
-              <ButtonGroup aria-label="outlined primary button group" color="primary">
-                <Button onClick={addFanfic}>Добавить </Button>
-                <Button>Редактировать</Button>
-                <Button onClick={deleteFanfics}>Удалить</Button>
-              </ButtonGroup>
-              <DataGrid
-                checkboxSelection
-                columns={columns}
-                onSelectionModelChange={onSelect}
-                pageSize={5}
-                rows={fanfics}
-              />
-            </div>
+            <Button className={classes.margin} color="primary" onClick={createFanfic} size="medium" variant="outlined">
+              Создать фанфик
+            </Button>
+            <FanficsGrid fanfics={fanfics} />
           </TabPanel>
           <TabPanel value="bookmarks">Закладки</TabPanel>
         </TabContext>
