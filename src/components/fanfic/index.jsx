@@ -17,6 +17,7 @@ import Box from '@material-ui/core/Box';
 import Rating from '@material-ui/lab/Rating';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -24,16 +25,15 @@ import { useStyles } from './styled';
 import { getToken } from '../../redux/selectors/selector';
 
 const Fanfic = ({
-  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId },
+  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete, isBookmarked,
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [value, setValue] = useState(2);
+  const [isFanficBookmarked, setFanficBookmarked] = useState(isBookmarked);
   const [isFanficLiked, setIsFanficLiked] = useState(isLiked);
   const [fanficLikes, setFanficLikes] = useState(likes);
   const token = useSelector(getToken);
-  const [selectedFanficIDs, setSelectedFanficIDs] = useState([]);
-  const [fanfics, setFanfics] = useState([]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,8 +42,14 @@ const Fanfic = ({
     setAnchorEl(null);
   };
 
+  const trimText = (text, maxSymbols) => {
+    if (text.length > maxSymbols) {
+      return `${text.substring(0, maxSymbols)}...`;
+    }
+
+    return text;
+  };
   const onLikeClick = () => {
-    console.log(userId);
     const method = isFanficLiked ? 'unlike' : 'like';
     axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/${method}`,
       {}, { headers: { Authorization: token } })
@@ -59,12 +65,11 @@ const Fanfic = ({
       });
   };
 
-  const deleteFanfics = () => {
-    axios.delete(`${process.env.REACT_APP_API_BASE}/fanfics`,
-      { headers: { Authorization: token }, data: selectedFanficIDs })
-      .then((response) => {
-        // eslint-disable-next-line no-underscore-dangle
-        setFanfics(fanfics.filter((f) => !selectedFanficIDs.includes(f._id)));
+  const deleteFanfic = () => {
+    axios.delete(`${process.env.REACT_APP_API_BASE}/fanfics/${id}`,
+      { headers: { Authorization: token } })
+      .then(() => {
+        onDelete(id);
       }).catch((error) => {
         console.error(error);
         if (error.response?.status === 403) {
@@ -73,9 +78,24 @@ const Fanfic = ({
       });
   };
 
+  const onBookmarkClick = () => {
+    const method = isFanficBookmarked ? 'remove_bookmark' : 'bookmark';
+    axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/${method}`,
+      {}, { headers: { Authorization: token } })
+      .then(() => {
+        setFanficBookmarked(!isFanficBookmarked);
+      }).catch((error) => {
+        console.error(error);
+        if (error.response?.status === 403) {
+        // TODO implement logout
+        // logout();
+        }
+      });
+  };
+
   return (
-    <Grid item lg={4} md={4}>
-      <Card className={classes.root}>
+    <Grid className={classes.root} item lg={4} md={4}>
+      <Card>
         <CardHeader
           action={(
             <IconButton aria-label="settings">
@@ -96,7 +116,7 @@ const Fanfic = ({
                 }}
               >
                 <MenuItem>Изменить</MenuItem>
-                <MenuItem onClick={deleteFanfics}>Удалить</MenuItem>
+                <MenuItem onClick={deleteFanfic}>Удалить</MenuItem>
               </Menu>
             </IconButton>
                         )}
@@ -116,11 +136,11 @@ const Fanfic = ({
 
         <CardActionArea>
           <CardContent key={id}>
-            <Typography component="h2" gutterBottom variant="h5">
-              {title}
+            <Typography className={classes.title} component="h2" gutterBottom variant="h5">
+              {trimText(title, 40)}
             </Typography>
-            <Typography color="textSecondary" component="p" variant="body2">
-              {description}
+            <Typography className={classes.description} color="textSecondary" component="p" variant="body2">
+              {trimText(description, 170)}
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -132,8 +152,9 @@ const Fanfic = ({
               {fanficLikes}
             </span>
           </IconButton>
-          <IconButton aria-label="add to favorites">
-            <BookmarkBorderIcon />
+          <IconButton aria-label="add to favorites" onClick={onBookmarkClick}>
+            {isFanficBookmarked && <BookmarkIcon />}
+            {!isFanficBookmarked && <BookmarkBorderIcon />}
           </IconButton>
           <Box borderColor="transparent" component="fieldset">
             <Rating
@@ -152,6 +173,7 @@ const Fanfic = ({
 
 Fanfic.defaultProps = {
   isLiked: false,
+  isBookmarked: false,
 };
 
 Fanfic.propTypes = {
@@ -165,6 +187,8 @@ Fanfic.propTypes = {
   lastName: PropTypes.string.isRequired,
   isLiked: PropTypes.bool,
   likes: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  isBookmarked: PropTypes.bool,
 };
 
 export default Fanfic;

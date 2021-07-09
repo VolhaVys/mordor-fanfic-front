@@ -5,5 +5,8 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     maxWidth: 1035,
     margin: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
   },
 }));

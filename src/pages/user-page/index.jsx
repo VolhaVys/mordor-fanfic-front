@@ -19,7 +19,7 @@ const UserPage = () => {
   const [value, setValue] = useState('my-fanfics');
   const token = useSelector(getToken);
   const [fanfics, setFanfics] = useState([]);
-  const [selectedFanficIDs, setSelectedFanficIDs] = useState([]);
+  const [isFanficLoad, setFanficLoad] = useState(false);
   const history = useHistory();
 
   const handleChange = (event, newValue) => {
@@ -35,6 +35,7 @@ const UserPage = () => {
 
         return fanfic;
       }));
+      setFanficLoad(true);
     }).catch((error) => {
       if (error.response?.status === 403) {
         console.log(error);
@@ -61,7 +62,7 @@ const UserPage = () => {
             <Button className={classes.margin} color="primary" onClick={createFanfic} size="medium" variant="outlined">
               Создать фанфик
             </Button>
-            <FanficsGrid fanfics={fanfics} />
+            {isFanficLoad && <FanficsGrid fanfics={fanfics} />}
           </TabPanel>
           <TabPanel value="bookmarks">Закладки</TabPanel>
         </TabContext>
