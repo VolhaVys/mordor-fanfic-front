@@ -32,7 +32,6 @@ const Fanfic = ({
   id, title, description, isLiked, likes, user: { firstName, lastName, _id: userId }, onDelete,
   isBookmarked, rating, rate, updateAt,
 }) => {
-  console.log(firstName, lastName, userId);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userRate, setUserRate] = useState(rate);
@@ -178,11 +177,6 @@ const Fanfic = ({
           subheader={Moment(updateAt).format('D MMM YYYY H:m')}
           title={`${firstName} ${lastName}`}
         />
-        {/* <CardMedia */}
-        {/*  className={classes.media} */}
-        {/*  image="/static/images/cards/contemplative-reptile.jpg" */}
-        {/*  title="Contemplative Reptile" */}
-        {/* /> */}
 
         <CardActionArea>
           <CardContent key={id}>
