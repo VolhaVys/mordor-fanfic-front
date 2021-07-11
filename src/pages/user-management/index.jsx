@@ -14,7 +14,7 @@ import { logoutAction } from '../../redux/actionCreators/actions';
 import { SIGN_IN_ROUTE } from '../../constant/routs';
 import { useStyles } from './styled';
 
-const Dashboard = () => {
+const UserManagement = () => {
   const classes = useStyles();
 
   const token = useSelector(getToken);
@@ -132,4 +132,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default UserManagement;

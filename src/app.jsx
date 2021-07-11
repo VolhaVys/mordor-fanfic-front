@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import SignIn from './pages/sign-in';
 import SignUp from './pages/sign-up';
-import Dashboard from './pages/dashboard';
+import UserManagement from './pages/user-management';
 import {
   SIGN_UP_ROUTE,
   SIGN_IN_ROUTE,
@@ -29,8 +29,8 @@ const App = () => (
           <UnauthorizedRoute component={SignIn} exact path={SIGN_IN_ROUTE} />
           <UnauthorizedRoute component={SignUp} exact path={SIGN_UP_ROUTE} />
           <Route component={HomePage} exact path={HOME_PAGE_ROUTE} />
-          <PrivateRoute component={Dashboard} exact path={DASHBOARD_ROUTE} />
-          <PrivateRoute component={Dashboard} exact path={DEFAULT_ROUTE} />
+          <PrivateRoute component={UserManagement} exact path={DASHBOARD_ROUTE} />
+          <PrivateRoute component={UserManagement} exact path={DEFAULT_ROUTE} />
           <PrivateRoute component={NewFanficPage} exact path={NEW_FANFIC_PAGE_ROUTE} />
           <PrivateRoute component={UserPage} exact path={USER_PAGE_ROUTE} />
         </Switch>

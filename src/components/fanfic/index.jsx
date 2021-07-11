@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,15 +25,24 @@ import { useStyles } from './styled';
 import { getToken } from '../../redux/selectors/selector';
 
 const Fanfic = ({
-  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete, isBookmarked,
+  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete, isBookmarked, rating, rate,
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [value, setValue] = useState(2);
+  const [userRate, setUserRate] = useState(rate);
+  const [fanficRating, setFanficRating] = useState(rating);
   const [isFanficBookmarked, setFanficBookmarked] = useState(isBookmarked);
   const [isFanficLiked, setIsFanficLiked] = useState(isLiked);
   const [fanficLikes, setFanficLikes] = useState(likes);
   const token = useSelector(getToken);
+
+  useEffect(() => {
+    setUserRate(rate);
+  }, [rate]);
+
+  useEffect(() => {
+    setFanficRating(rating);
+  }, [rating]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -66,7 +75,7 @@ const Fanfic = ({
   };
 
   const deleteFanfic = () => {
-    axios.delete(`${process.env.REACT_APP_API_BASE}/fanfics/${id}`,
+    axios.delete(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/`,
       { headers: { Authorization: token } })
       .then(() => {
         onDelete(id);
@@ -85,6 +94,25 @@ const Fanfic = ({
       .then(() => {
         setFanficBookmarked(!isFanficBookmarked);
       }).catch((error) => {
+        console.error(error);
+        if (error.response?.status === 403) {
+        // TODO implement logout
+        // logout();
+        }
+      });
+  };
+
+  const onRate = (event, newRating) => {
+    const oldRating = userRate;
+    setUserRate(newRating);
+
+    axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/rating`,
+      { rating: newRating }, { headers: { Authorization: token } })
+      .then((response) => {
+        setFanficRating(response.data.rating);
+      })
+      .catch((error) => {
+        setUserRate(oldRating);
         console.error(error);
         if (error.response?.status === 403) {
         // TODO implement logout
@@ -158,12 +186,11 @@ const Fanfic = ({
           </IconButton>
           <Box borderColor="transparent" component="fieldset">
             <Rating
-              name="simple-controlled"
-              onChange={(event, newValue) => {
-                setValue(newValue);
-              }}
-              value={value}
+              name={`fanfic-${id}-rating`}
+              onChange={onRate}
+              value={userRate}
             />
+            <span style={{ fontSize: 18 }}>{fanficRating}</span>
           </Box>
         </CardActions>
       </Card>
@@ -174,6 +201,7 @@ const Fanfic = ({
 Fanfic.defaultProps = {
   isLiked: false,
   isBookmarked: false,
+  rate: null,
 };
 
 Fanfic.propTypes = {
@@ -189,6 +217,8 @@ Fanfic.propTypes = {
   likes: PropTypes.number.isRequired,
   onDelete: PropTypes.func.isRequired,
   isBookmarked: PropTypes.bool,
+  rating: PropTypes.number.isRequired,
+  rate: PropTypes.number,
 };
 
 export default Fanfic;
