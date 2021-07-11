@@ -24,14 +24,15 @@ import { useSelector } from 'react-redux';
 import Moment from 'moment';
 import 'moment/locale/ru';
 import { useStyles } from './styled';
-import { getToken } from '../../redux/selectors/selector';
+import { getToken, getUserData } from '../../redux/selectors/selector';
 
 Moment.locale('ru');
 
 const Fanfic = ({
-  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete,
+  id, title, description, isLiked, likes, user: { firstName, lastName, _id: userId }, onDelete,
   isBookmarked, rating, rate, updateAt,
 }) => {
+  console.log(firstName, lastName, userId);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userRate, setUserRate] = useState(rate);
@@ -40,6 +41,7 @@ const Fanfic = ({
   const [isFanficLiked, setIsFanficLiked] = useState(isLiked);
   const [fanficLikes, setFanficLikes] = useState(likes);
   const token = useSelector(getToken);
+  const user = useSelector(getUserData);
 
   useEffect(() => {
     setUserRate(rate);
@@ -75,18 +77,21 @@ const Fanfic = ({
 
     return text;
   };
+
+  const canChange = () => user && (user.role === 'admin' || user.id === userId);
+
   const onLikeClick = () => {
     const method = isFanficLiked ? 'unlike' : 'like';
     axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/${method}`,
       {}, { headers: { Authorization: token } })
-      .then((response) => {
+      .then(() => {
         setFanficLikes(isFanficLiked ? fanficLikes - 1 : fanficLikes + 1);
         setIsFanficLiked(!isFanficLiked);
       }).catch((error) => {
         console.error(error);
         if (error.response?.status === 403) {
-          // TODO implement logout
-          // logout();
+        // TODO implement logout
+        // logout();
         }
       });
   };
@@ -132,8 +137,8 @@ const Fanfic = ({
         setUserRate(oldRating);
         console.error(error);
         if (error.response?.status === 403) {
-        // TODO implement logout
-        // logout();
+          // TODO implement logout
+          // logout();
         }
       });
   };
@@ -142,34 +147,34 @@ const Fanfic = ({
     <Grid className={classes.root} item lg={4} md={4}>
       <Card>
         <CardHeader
-          action={(
-            <IconButton aria-label="settings">
-              <MoreVertIcon onClick={handleMenu} />
-              <Menu
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                id="menu-appbar"
-                keepMounted
-                onClose={handleClose}
-                open={!!anchorEl}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <MenuItem>Изменить</MenuItem>
-                <MenuItem onClick={deleteFanfic}>Удалить</MenuItem>
-              </Menu>
-            </IconButton>
-                        )}
+          action={canChange() && (
+          <IconButton aria-label="settings" onClick={handleMenu}>
+            <MoreVertIcon />
+            <Menu
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              id="menu-appbar"
+              keepMounted
+              onClose={handleClose}
+              open={!!anchorEl}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuItem>Изменить</MenuItem>
+              <MenuItem onClick={deleteFanfic}>Удалить</MenuItem>
+            </Menu>
+          </IconButton>
+          )}
           avatar={(
             <Avatar aria-label="recipe" className={classes.avatar}>
               { firstName.substr(0, 1) }
             </Avatar>
-                        )}
+              )}
           subheader={Moment(updateAt).format('D MMM YYYY H:m')}
           title={`${firstName} ${lastName}`}
         />
@@ -219,6 +224,7 @@ Fanfic.defaultProps = {
   isLiked: false,
   isBookmarked: false,
   rate: null,
+  rating: null,
 };
 
 Fanfic.propTypes = {
@@ -234,7 +240,7 @@ Fanfic.propTypes = {
   likes: PropTypes.number.isRequired,
   onDelete: PropTypes.func.isRequired,
   isBookmarked: PropTypes.bool,
-  rating: PropTypes.number.isRequired,
+  rating: PropTypes.number,
   rate: PropTypes.number,
   updateAt: PropTypes.string.isRequired,
 };

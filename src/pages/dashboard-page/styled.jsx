@@ -2,8 +2,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
   gridTitle: {
-    maxWidth: 1035,
+    padding: '40px 0 30px',
+  },
+  tagCloud: {
+    marginTop: 30,
+    maxWidth: 500,
     margin: 'auto',
-    padding: '50px 0 30px',
+    textAlign: 'center',
   },
 }));

@@ -37,10 +37,13 @@ const RenderUser = () => {
     history.push(SIGN_IN_ROUTE);
   };
 
-  if (useSelector(getToken)) {
+  const token = useSelector(getToken);
+  const user = useSelector(getUserData);
+
+  if (token) {
     return (
       <Toolbar>
-        <div>{useSelector(getUserData).firstName}</div>
+        <div>{user?.firstName}</div>
         <IconButton
           aria-controls="menu-appbar"
           aria-haspopup="true"

@@ -63,4 +63,8 @@ export const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  main: {
+    margin: 'auto',
+    maxWidth: 1035,
+  },
 }));

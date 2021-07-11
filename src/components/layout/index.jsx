@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
 import { useStyles } from './styled';
-import RenderUser from './config';
+import RenderUser from './render-user';
 import { DASHBOARD_ROUTE } from '../../constant/routs';
 
 const Layout = ({ children }) => {
@@ -20,37 +20,37 @@ const Layout = ({ children }) => {
 
   return (
     <Grid>
-      <div className={classes.grow}>
-        <AppBar position="static">
-          <Toolbar>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ 'aria-label': 'search' }}
-                placeholder="Search…"
-              />
+      <AppBar className={classes.grow} position="static">
+        <Toolbar>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
-            <Typography className={classes.title} noWrap onClick={toDashboard} variant="h6">
-              Мордор — техногенная цивилизация, опороченная победителями
-            </Typography>
-            <div className={classes.grow} />
-            <RenderUser />
-          </Toolbar>
-        </AppBar>
-      </div>
-      {children}
+            <InputBase
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+              placeholder="Search…"
+            />
+          </div>
+          <Typography className={classes.title} noWrap onClick={toDashboard} variant="h6">
+            Мордор — техногенная цивилизация, опороченная победителями
+          </Typography>
+          <div className={classes.grow} />
+          <RenderUser />
+        </Toolbar>
+      </AppBar>
+      <main className={classes.main}>
+        {children}
+      </main>
     </Grid>
   );
 };
 
 Layout.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;
