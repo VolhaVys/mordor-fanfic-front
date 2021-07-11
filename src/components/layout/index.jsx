@@ -6,11 +6,17 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 import { useStyles } from './styled';
 import RenderUser from './config';
+import { DASHBOARD_ROUTE } from '../../constant/routs';
 
 const Layout = ({ children }) => {
   const classes = useStyles();
+  const history = useHistory();
+  const toDashboard = () => {
+    history.push(DASHBOARD_ROUTE);
+  };
 
   return (
     <Grid>
@@ -30,7 +36,7 @@ const Layout = ({ children }) => {
                 placeholder="Search…"
               />
             </div>
-            <Typography className={classes.title} noWrap variant="h6">
+            <Typography className={classes.title} noWrap onClick={toDashboard} variant="h6">
               Мордор — техногенная цивилизация, опороченная победителями
             </Typography>
             <div className={classes.grow} />

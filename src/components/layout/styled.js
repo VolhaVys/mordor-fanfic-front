@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: 'none',
+    cursor: 'pointer',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },

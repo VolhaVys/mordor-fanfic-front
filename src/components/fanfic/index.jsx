@@ -21,11 +21,16 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import Moment from 'moment';
+import 'moment/locale/ru';
 import { useStyles } from './styled';
 import { getToken } from '../../redux/selectors/selector';
 
+Moment.locale('ru');
+
 const Fanfic = ({
-  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete, isBookmarked, rating, rate,
+  id, title, description, isLiked, likes, user: { firstName, lastName, id: userId }, onDelete,
+  isBookmarked, rating, rate, updateAt,
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,6 +48,18 @@ const Fanfic = ({
   useEffect(() => {
     setFanficRating(rating);
   }, [rating]);
+
+  useEffect(() => {
+    setFanficBookmarked(isBookmarked);
+  }, [isBookmarked]);
+
+  useEffect(() => {
+    setIsFanficLiked(isLiked);
+  }, [isLiked]);
+
+  useEffect(() => {
+    setFanficLikes(likes);
+  }, [likes]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -153,7 +170,7 @@ const Fanfic = ({
               { firstName.substr(0, 1) }
             </Avatar>
                         )}
-                        // subheader="September 14, 2016"
+          subheader={Moment(updateAt).format('D MMM YYYY H:m')}
           title={`${firstName} ${lastName}`}
         />
         {/* <CardMedia */}
@@ -219,6 +236,7 @@ Fanfic.propTypes = {
   isBookmarked: PropTypes.bool,
   rating: PropTypes.number.isRequired,
   rate: PropTypes.number,
+  updateAt: PropTypes.string.isRequired,
 };
 
 export default Fanfic;
