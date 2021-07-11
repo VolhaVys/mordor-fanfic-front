@@ -19,14 +19,11 @@ const UserPage = () => {
   const [value, setValue] = useState('my-fanfics');
   const token = useSelector(getToken);
   const [fanfics, setFanfics] = useState([]);
-  const [isFanficLoad, setFanficLoad] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+
   const history = useHistory();
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  useEffect(() => {
+  const updateFanfics = () => {
     axios.get(`${process.env.REACT_APP_API_BASE}/users/fanfics`,
       { headers: { Authorization: token } }).then((response) => {
       setFanfics(response.data.map((fanfic) => {
@@ -35,14 +32,39 @@ const UserPage = () => {
 
         return fanfic;
       }));
-      setFanficLoad(true);
     }).catch((error) => {
       if (error.response?.status === 403) {
         console.log(error);
       }
       console.log(error);
     });
+  };
+
+  useEffect(() => {
+    updateFanfics();
   }, []);
+
+  const handleChange = (event, newValue) => {
+    if (newValue === 'my-fanfics') {
+      updateFanfics();
+    } else if (newValue === 'bookmarks') {
+      axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/bookmarked`,
+        { headers: { Authorization: token } }).then((response) => {
+        setBookmarks(response.data.map((fanfic) => {
+          // eslint-disable-next-line no-underscore-dangle
+          fanfic.id = fanfic._id;
+
+          return fanfic;
+        }));
+      }).catch((error) => {
+        if (error.response?.status === 403) {
+          console.log(error);
+        }
+        console.log(error);
+      });
+    }
+    setValue(newValue);
+  };
 
   const createFanfic = () => {
     history.push(NEW_FANFIC_PAGE_ROUTE);
@@ -62,9 +84,9 @@ const UserPage = () => {
             <Button className={classes.margin} color="primary" onClick={createFanfic} size="medium" variant="outlined">
               Создать фанфик
             </Button>
-            {isFanficLoad && <FanficsGrid fanfics={fanfics} />}
+            <FanficsGrid fanfics={fanfics} />
           </TabPanel>
-          <TabPanel value="bookmarks">Закладки</TabPanel>
+          <TabPanel value="bookmarks"><FanficsGrid fanfics={bookmarks} /></TabPanel>
         </TabContext>
       </div>
     </Layout>
