@@ -65,6 +65,8 @@ const Fanfic = ({
     setFanficLikes(likes);
   }, [likes]);
 
+  const formatRating = () => fanficRating && Math.round(fanficRating * 100) / 100;
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -203,7 +205,7 @@ const Fanfic = ({
           <IconButton aria-label="add to favorites" onClick={onLikeClick}>
             {!isFanficLiked && <FavoriteBorderIcon />}
             {isFanficLiked && <FavoriteIcon />}
-            <span style={{ fontSize: 18 }}>
+            <span className={classes.counter}>
               {fanficLikes}
             </span>
           </IconButton>
@@ -217,7 +219,7 @@ const Fanfic = ({
               onChange={onRate}
               value={userRate}
             />
-            <span style={{ fontSize: 18 }}>{fanficRating}</span>
+            <span className={classes.counter}>{formatRating()}</span>
           </Box>
         </CardActions>
       </Card>

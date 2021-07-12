@@ -23,5 +23,7 @@ export const useStyles = makeStyles((theme) => ({
     height: 60,
     fontSize: 22,
   },
-
+  counter: {
+    fontSize: 18,
+  },
 }));
