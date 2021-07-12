@@ -51,7 +51,7 @@ const SignIn = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Вход
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             {inputConfig.map((cfg) => (
@@ -66,6 +66,7 @@ const SignIn = () => {
                     autoFocus
                     error={!!errors[cfg.name]}
                     fullWidth
+                    helperText={errors[cfg.name] && errors[cfg.name].type === 'pattern' && 'Неправильный формат'}
                     id={cfg.id}
                     label={cfg.label}
                     margin="normal"
@@ -76,7 +77,7 @@ const SignIn = () => {
                     value={value}
                   />
                 )}
-                rules={{ required: true }}
+                rules={cfg.rules ?? { required: true }}
               />
             ))}
             {errors.submit && <Alert severity="error">{errors.submit.message}</Alert>}
@@ -88,12 +89,12 @@ const SignIn = () => {
               type="submit"
               variant="contained"
             >
-              Sign In
+              Войти
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
                 <Link href={SIGN_UP_ROUTE} variant="body2">
-                  Dont have an account? Sign Up
+                  Нет аккаунта? Зарегистрируйтесь
                 </Link>
               </Grid>
             </Grid>

@@ -1,8 +1,10 @@
+import { EMAIL_PATTERN } from '../../constant/pattern';
+
 export const inputConfig = [
   {
     autoComplete: 'fname',
     id: 'firstName',
-    label: 'First Name',
+    label: 'Имя',
     name: 'firstName',
     sm: 6,
     xs: 12,
@@ -10,7 +12,7 @@ export const inputConfig = [
   {
     autoComplete: 'lname',
     id: 'lastName',
-    label: 'Last Name',
+    label: 'Фамилия',
     name: 'lastName',
     sm: 6,
     xs: 12,
@@ -18,14 +20,18 @@ export const inputConfig = [
   {
     autoComplete: 'email',
     id: 'email',
-    label: 'Email Address',
+    label: 'Email',
     name: 'email',
     xs: 12,
+    rules: {
+      required: true,
+      pattern: EMAIL_PATTERN,
+    },
   },
   {
     autoComplete: 'current-password',
     id: 'password',
-    label: 'Password',
+    label: 'Пароль',
     name: 'password',
     type: 'password',
     xs: 12,
@@ -33,7 +39,7 @@ export const inputConfig = [
   {
     autoComplete: 'current-password',
     id: 'repeatPassword',
-    label: 'Repeat Password',
+    label: 'Повторите пароль',
     name: 'repeatPassword',
     type: 'password',
     xs: 12,

@@ -54,7 +54,7 @@ const SignUp = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Регистрация
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
@@ -69,6 +69,7 @@ const SignUp = () => {
                         autoComplete={cfg.autoComplete}
                         error={!!errors[cfg.name]}
                         fullWidth
+                        helperText={errors[cfg.name] && errors[cfg.name].type === 'pattern' && 'Неправильный формат'}
                         id={cfg.id}
                         label={cfg.label}
                         name={cfg.name}
@@ -78,7 +79,7 @@ const SignUp = () => {
                         value={value}
                       />
                     )}
-                    rules={{ required: 'First name required' }}
+                    rules={cfg.rules ?? { required: true }}
                   />
                 </Grid>
               ))}
@@ -92,12 +93,12 @@ const SignUp = () => {
               type="submit"
               variant="contained"
             >
-              Sign Up
+              Зарегистрироваться
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
                 <Link href={SIGN_IN_ROUTE} variant="body2">
-                  Already have an account? Sign in
+                  Уже есть аккаунт? Войдите
                 </Link>
               </Grid>
             </Grid>
