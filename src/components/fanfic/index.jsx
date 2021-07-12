@@ -26,7 +26,7 @@ import 'moment/locale/ru';
 import { useHistory } from 'react-router-dom';
 import { useStyles } from './styled';
 import { getToken, getUserData } from '../../redux/selectors/selector';
-import { EDIT_FANFIC_PAGE_ROUTE } from '../../constant/routs';
+import { EDIT_FANFIC_PAGE_ROUTE, PREVIEW_FANFIC_ROUTE } from '../../constant/routs';
 
 Moment.locale('ru');
 
@@ -115,6 +115,10 @@ const Fanfic = ({
     history.push(EDIT_FANFIC_PAGE_ROUTE.replace(':fanficId', id));
   };
 
+  const onPreviewClick = () => {
+    history.push(PREVIEW_FANFIC_ROUTE.replace(':fanficId', id));
+  };
+
   const onBookmarkClick = () => {
     const method = isFanficBookmarked ? 'remove_bookmark' : 'bookmark';
     axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/${method}`,
@@ -154,8 +158,8 @@ const Fanfic = ({
       <Card>
         <CardHeader
           action={canChange() && (
-          <IconButton aria-label="settings" onClick={handleMenu}>
-            <MoreVertIcon />
+          <IconButton aria-label="settings">
+            <MoreVertIcon onClick={handleMenu} />
             <Menu
               anchorEl={anchorEl}
               anchorOrigin={{
@@ -186,7 +190,7 @@ const Fanfic = ({
         />
 
         <CardActionArea>
-          <CardContent key={id}>
+          <CardContent key={id} onClick={onPreviewClick}>
             <Typography className={classes.title} component="h2" gutterBottom variant="h5">
               {trimText(title, 40)}
             </Typography>

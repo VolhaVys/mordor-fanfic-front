@@ -11,7 +11,7 @@ import {
   DASHBOARD_ROUTE,
   DEFAULT_ROUTE,
   NEW_FANFIC_PAGE_ROUTE,
-  USER_PAGE_ROUTE, USER_MANAGEMENT_ROUTE, EDIT_FANFIC_PAGE_ROUTE,
+  USER_PAGE_ROUTE, USER_MANAGEMENT_ROUTE, EDIT_FANFIC_PAGE_ROUTE, PREVIEW_FANFIC_ROUTE,
 } from './constant/routs';
 import PrivateRoute from './components/private-route';
 import { store, persistor } from './redux/store';
@@ -19,6 +19,7 @@ import UnauthorizedRoute from './components/unauthorized-route';
 import NewFanficPage from './pages/new-fanfic-page';
 import UserPage from './pages/user-page';
 import DashboardPage from './pages/dashboard-page';
+import PreviewFanficPage from './pages/preview-fanfic-page';
 
 const App = () => (
   <Provider store={store}>
@@ -29,6 +30,7 @@ const App = () => (
           <UnauthorizedRoute component={SignUp} exact path={SIGN_UP_ROUTE} />
           <PrivateRoute component={UserManagementPage} exact path={USER_MANAGEMENT_ROUTE} />
           <Route component={DashboardPage} exact path={DASHBOARD_ROUTE} />
+          <Route component={PreviewFanficPage} exact path={PREVIEW_FANFIC_ROUTE} />
           <Route component={DashboardPage} exact path={DEFAULT_ROUTE} />
           <PrivateRoute component={NewFanficPage} exact path={NEW_FANFIC_PAGE_ROUTE} />
           <PrivateRoute component={NewFanficPage} exact path={EDIT_FANFIC_PAGE_ROUTE} />

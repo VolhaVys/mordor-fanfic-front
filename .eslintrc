@@ -39,6 +39,7 @@
     "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
     "no-unused-vars": 1,
     "no-undefined": 0,
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "no-param-reassign": 0,
     "linebreak-style": 0,
     "func-style": [2, "expression"],

@@ -34,7 +34,6 @@ const DashboardPage = () => {
     axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/top/${limit}`,
       { headers: { Authorization: token } }).then((response) => {
       setTopFanfics(response.data.map((fanfic) => {
-        // eslint-disable-next-line no-underscore-dangle
         fanfic.id = fanfic._id;
 
         return fanfic;
@@ -49,7 +48,6 @@ const DashboardPage = () => {
     axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/last/${limit}`,
       { headers: { Authorization: token } }).then((response) => {
       setLastFanfics(response.data.map((fanfic) => {
-        // eslint-disable-next-line no-underscore-dangle
         fanfic.id = fanfic._id;
 
         return fanfic;

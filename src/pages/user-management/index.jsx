@@ -13,6 +13,7 @@ import { columns } from './config';
 import { logoutAction } from '../../redux/actionCreators/actions';
 import { SIGN_IN_ROUTE } from '../../constant/routs';
 import { useStyles } from './styled';
+import Layout from '../../components/layout';
 
 const UserManagementPage = () => {
   const classes = useStyles();
@@ -31,7 +32,6 @@ const UserManagementPage = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_BASE}/users`, { headers: { Authorization: token } }).then((response) => {
       setUsers(response.data.map((user) => {
-        // eslint-disable-next-line no-underscore-dangle
         user.id = user._id;
 
         return user;
@@ -48,9 +48,7 @@ const UserManagementPage = () => {
     axios.put(`${process.env.REACT_APP_API_BASE}/users/block`,
       selectedUserIDs, { headers: { Authorization: token } })
       .then((response) => {
-        // eslint-disable-next-line no-underscore-dangle
         setUsers(response.data.map((user) => {
-          // eslint-disable-next-line no-underscore-dangle
           user.id = user._id;
 
           return user;
@@ -67,9 +65,7 @@ const UserManagementPage = () => {
     axios.delete(`${process.env.REACT_APP_API_BASE}/users`,
       { headers: { Authorization: token }, data: selectedUserIDs })
       .then((response) => {
-        // eslint-disable-next-line no-underscore-dangle
         setUsers(response.data.map((user) => {
-          // eslint-disable-next-line no-underscore-dangle
           user.id = user._id;
 
           return user;
@@ -87,7 +83,6 @@ const UserManagementPage = () => {
       selectedUserIDs, { headers: { Authorization: token } })
       .then((response) => {
         setUsers(response.data.map((user) => {
-          // eslint-disable-next-line no-underscore-dangle
           user.id = user._id;
 
           return user;
@@ -104,31 +99,30 @@ const UserManagementPage = () => {
   };
 
   return (
-    <Grid>
-      <div className={classes.btnPanel}>
-        <div className={classes.toolbar}>
-          <Button onClick={blockUsers} variant="outlined">Block</Button>
-          <IconButton aria-label="unblock" onClick={unBlockUsers}>
-            <LockOpenIcon />
-          </IconButton>
-          <IconButton aria-label="delete" onClick={deleteUsers}>
-            <DeleteIcon />
-          </IconButton>
+    <Layout>
+      <Grid>
+        <div className={classes.btnPanel}>
+          <div className={classes.toolbar}>
+            <Button onClick={blockUsers} variant="outlined">Block</Button>
+            <IconButton aria-label="unblock" onClick={unBlockUsers}>
+              <LockOpenIcon />
+            </IconButton>
+            <IconButton aria-label="delete" onClick={deleteUsers}>
+              <DeleteIcon />
+            </IconButton>
+          </div>
         </div>
-        <div className={classes.logout}>
-          <Button onClick={logout} variant="outlined">Logout</Button>
+        <div style={{ height: 400 }}>
+          <DataGrid
+            checkboxSelection
+            columns={columns}
+            onSelectionModelChange={onSelect}
+            pageSize={5}
+            rows={users}
+          />
         </div>
-      </div>
-      <div style={{ height: 400 }}>
-        <DataGrid
-          checkboxSelection
-          columns={columns}
-          onSelectionModelChange={onSelect}
-          pageSize={5}
-          rows={users}
-        />
-      </div>
-    </Grid>
+      </Grid>
+    </Layout>
   );
 };
 

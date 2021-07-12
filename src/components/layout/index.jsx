@@ -1,12 +1,11 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import { Grid } from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
+import HomeIcon from '@material-ui/icons/Home';
 import { useStyles } from './styled';
 import RenderUser from './render-user';
 import { DASHBOARD_ROUTE } from '../../constant/routs';
@@ -22,19 +21,9 @@ const Layout = ({ children }) => {
     <Grid>
       <AppBar className={classes.grow} position="static">
         <Toolbar>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              placeholder="Search…"
-            />
-          </div>
+          <IconButton aria-label="menu" className={classes.menuButton} color="inherit" edge="start" onClick={toDashboard}>
+            <HomeIcon />
+          </IconButton>
           <Typography className={classes.title} noWrap onClick={toDashboard} variant="h6">
             Мордор — техногенная цивилизация, опороченная победителями
           </Typography>

@@ -21,7 +21,7 @@ import { loginAction } from '../../redux/actionCreators/actions';
 const SignIn = () => {
   const classes = useStyles();
   const {
-    control, handleSubmit, formState: { errors }, setError,
+    control, handleSubmit, formState: { errors }, setError, clearErrors,
   } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -38,6 +38,10 @@ const SignIn = () => {
     });
   };
 
+  const clearSubmitErrors = () => {
+    clearErrors('submit');
+  };
+
   return (
     <Container className={classes.container}>
       <Container component="main" maxWidth="xs">
@@ -49,7 +53,7 @@ const SignIn = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+          <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             {inputConfig.map((cfg) => (
               <Controller
                 control={control}
@@ -60,6 +64,7 @@ const SignIn = () => {
                   <Input
                     autoComplete={cfg.autoComplete}
                     autoFocus
+                    error={!!errors[cfg.name]}
                     fullWidth
                     id={cfg.id}
                     label={cfg.label}
@@ -71,7 +76,7 @@ const SignIn = () => {
                     value={value}
                   />
                 )}
-                rules={{ required: 'First name required' }}
+                rules={{ required: true }}
               />
             ))}
             {errors.submit && <Alert severity="error">{errors.submit.message}</Alert>}
@@ -79,6 +84,7 @@ const SignIn = () => {
               className={classes.submit}
               color="primary"
               fullWidth
+              onClick={clearSubmitErrors}
               type="submit"
               variant="contained"
             >

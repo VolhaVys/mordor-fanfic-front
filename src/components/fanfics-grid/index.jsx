@@ -13,14 +13,12 @@ const FanficsGrid = ({ fanfics }) => {
   }, [fanfics]);
 
   const onFanficDelete = (id) => {
-    // eslint-disable-next-line no-underscore-dangle
     setGridFanfics(gridFanfics.filter((f) => f._id !== id));
   };
 
   return (
     <Grid className={classes.root} container spacing={2}>
       {gridFanfics.map((fanfic) => (
-        // eslint-disable-next-line no-underscore-dangle
         <Fanfic {...fanfic} key={fanfic._id} onDelete={onFanficDelete} />
       ))}
     </Grid>

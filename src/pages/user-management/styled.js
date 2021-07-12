@@ -8,9 +8,4 @@ export const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingLeft: 10,
   },
-  logout: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingRight: 10,
-  },
 }));

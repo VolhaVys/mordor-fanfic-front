@@ -21,7 +21,7 @@ import { loginAction } from '../../redux/actionCreators/actions';
 const SignUp = () => {
   const classes = useStyles();
   const {
-    control, handleSubmit, formState: { errors }, setError,
+    control, handleSubmit, formState: { errors }, setError, clearErrors,
   } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -38,6 +38,10 @@ const SignUp = () => {
     });
   };
 
+  const clearSubmitErrors = () => {
+    clearErrors('submit');
+  };
+
   return (
     <Container className={classes.container}>
       <Container
@@ -52,7 +56,7 @@ const SignUp = () => {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+          <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
               {inputConfig.map((cfg) => (
                 <Grid item key={cfg.id} sm={cfg.sm} xs={cfg.xs}>
@@ -63,6 +67,7 @@ const SignUp = () => {
                     render={({ field: { onChange, value } }) => (
                       <Input
                         autoComplete={cfg.autoComplete}
+                        error={!!errors[cfg.name]}
                         fullWidth
                         id={cfg.id}
                         label={cfg.label}
@@ -83,6 +88,7 @@ const SignUp = () => {
               className={classes.submit}
               color="primary"
               fullWidth
+              onClick={clearSubmitErrors}
               type="submit"
               variant="contained"
             >

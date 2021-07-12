@@ -27,7 +27,6 @@ const UserPage = () => {
     axios.get(`${process.env.REACT_APP_API_BASE}/users/fanfics`,
       { headers: { Authorization: token } }).then((response) => {
       setFanfics(response.data.map((fanfic) => {
-        // eslint-disable-next-line no-underscore-dangle
         fanfic.id = fanfic._id;
 
         return fanfic;
@@ -51,7 +50,6 @@ const UserPage = () => {
       axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/bookmarked`,
         { headers: { Authorization: token } }).then((response) => {
         setBookmarks(response.data.map((fanfic) => {
-          // eslint-disable-next-line no-underscore-dangle
           fanfic.id = fanfic._id;
 
           return fanfic;

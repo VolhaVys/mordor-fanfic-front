@@ -23,7 +23,7 @@ import { USER_PAGE_ROUTE } from '../../constant/routs';
 const NewFanficPage = () => {
   const classes = useStyles();
   const {
-    control, handleSubmit, formState: { errors }, setError,
+    control, handleSubmit, formState: { errors }, setError, clearErrors,
   } = useForm();
   const token = useSelector(getToken);
   const history = useHistory();
@@ -38,6 +38,10 @@ const NewFanficPage = () => {
       type: 'server',
       message: e.response?.data?.message ?? 'Сервер временно недоступен',
     });
+  };
+
+  const clearSubmitErrors = () => {
+    clearErrors('submit');
   };
 
   useEffect(() => {
@@ -59,9 +63,7 @@ const NewFanficPage = () => {
 
   const onSubmit = (data) => {
     if (fanficId) {
-      // eslint-disable-next-line no-underscore-dangle
-      data._id = fanficId;
-      axios.put(`${process.env.REACT_APP_API_BASE}/fanfics`, data, { headers: { Authorization: token } })
+      axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${fanficId}`, data, { headers: { Authorization: token } })
         .then(() => {
           history.goBack();
         }).catch(setServerError);
@@ -100,7 +102,6 @@ const NewFanficPage = () => {
                   multiline={!!cfg.multiline}
                   onChange={onChange}
                   required
-                  rows={cfg.rows}
                   value={value}
                 />
               )}
@@ -172,6 +173,7 @@ const NewFanficPage = () => {
             <Button
               className={classes.button}
               color="primary"
+              onClick={clearSubmitErrors}
               size="medium"
               type="submit"
               variant="contained"

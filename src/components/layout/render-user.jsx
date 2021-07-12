@@ -8,7 +8,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { SIGN_IN_ROUTE, USER_PAGE_ROUTE } from '../../constant/routs';
+import { SIGN_IN_ROUTE, USER_MANAGEMENT_ROUTE, USER_PAGE_ROUTE } from '../../constant/routs';
 import { getToken, getUserData } from '../../redux/selectors/selector';
 import { logoutAction } from '../../redux/actionCreators/actions';
 
@@ -36,6 +36,10 @@ const RenderUser = () => {
 
   const login = () => {
     history.push(SIGN_IN_ROUTE);
+  };
+
+  const onUserManagement = () => {
+    history.push(USER_MANAGEMENT_ROUTE);
   };
 
   const token = useSelector(getToken);
@@ -69,14 +73,15 @@ const RenderUser = () => {
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={onProfile}>Profile</MenuItem>
-          <MenuItem onClick={onLogout}>Logout</MenuItem>
+          <MenuItem onClick={onProfile}>Профиль</MenuItem>
+          {user?.role === 'admin' && <MenuItem onClick={onUserManagement}>Управление пользователями</MenuItem>}
+          <MenuItem onClick={onLogout}>Выйти</MenuItem>
         </Menu>
       </Toolbar>
     );
   }
 
-  return <Button color="secondary" onClick={login}>Login</Button>;
+  return <Button color="secondary" onClick={login}>Войти</Button>;
 };
 
 export default RenderUser;
