@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,7 @@ import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Alert } from '@material-ui/lab';
 import { useStyles } from './styled';
 import { DEFAULT_ROUTE, SIGN_IN_ROUTE } from '../../constant/routs';
 import { inputConfig } from './config';
@@ -19,17 +20,21 @@ import { loginAction } from '../../redux/actionCreators/actions';
 
 const SignUp = () => {
   const classes = useStyles();
-  const { control, handleSubmit } = useForm();
+  const {
+    control, handleSubmit, formState: { errors }, setError,
+  } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
 
   const onSubmit = (data) => {
     axios.post(`${process.env.REACT_APP_API_BASE}/registration`, data).then((response) => {
       dispatch(loginAction(response.data.token, response.data.user));
       history.push(DEFAULT_ROUTE);
     }).catch((e) => {
-      setError(e.response?.data?.message ?? 'Server is temporarily unavailable');
+      setError('submit', {
+        type: 'server',
+        message: e.response?.data?.message ?? 'Сервер временно недоступен',
+      });
     });
   };
 
@@ -73,7 +78,7 @@ const SignUp = () => {
                 </Grid>
               ))}
             </Grid>
-            <p style={{ color: 'red' }}>{error}</p>
+            {errors.submit && <Alert severity="error">{errors.submit.message}</Alert>}
             <Button
               className={classes.submit}
               color="primary"

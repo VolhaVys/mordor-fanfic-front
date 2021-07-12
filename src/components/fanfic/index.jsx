@@ -23,8 +23,10 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Moment from 'moment';
 import 'moment/locale/ru';
+import { useHistory } from 'react-router-dom';
 import { useStyles } from './styled';
 import { getToken, getUserData } from '../../redux/selectors/selector';
+import { EDIT_FANFIC_PAGE_ROUTE } from '../../constant/routs';
 
 Moment.locale('ru');
 
@@ -41,6 +43,7 @@ const Fanfic = ({
   const [fanficLikes, setFanficLikes] = useState(likes);
   const token = useSelector(getToken);
   const user = useSelector(getUserData);
+  const history = useHistory();
 
   useEffect(() => {
     setUserRate(rate);
@@ -108,6 +111,10 @@ const Fanfic = ({
       });
   };
 
+  const editFanfic = () => {
+    history.push(EDIT_FANFIC_PAGE_ROUTE.replace(':fanficId', id));
+  };
+
   const onBookmarkClick = () => {
     const method = isFanficBookmarked ? 'remove_bookmark' : 'bookmark';
     axios.put(`${process.env.REACT_APP_API_BASE}/fanfics/${id}/${method}`,
@@ -164,7 +171,7 @@ const Fanfic = ({
                 horizontal: 'right',
               }}
             >
-              <MenuItem>Изменить</MenuItem>
+              <MenuItem onClick={editFanfic}>Изменить</MenuItem>
               <MenuItem onClick={deleteFanfic}>Удалить</MenuItem>
             </Menu>
           </IconButton>

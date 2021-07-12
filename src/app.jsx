@@ -11,7 +11,7 @@ import {
   DASHBOARD_ROUTE,
   DEFAULT_ROUTE,
   NEW_FANFIC_PAGE_ROUTE,
-  USER_PAGE_ROUTE, USER_MANAGEMENT_ROUTE,
+  USER_PAGE_ROUTE, USER_MANAGEMENT_ROUTE, EDIT_FANFIC_PAGE_ROUTE,
 } from './constant/routs';
 import PrivateRoute from './components/private-route';
 import { store, persistor } from './redux/store';
@@ -31,6 +31,7 @@ const App = () => (
           <Route component={DashboardPage} exact path={DASHBOARD_ROUTE} />
           <Route component={DashboardPage} exact path={DEFAULT_ROUTE} />
           <PrivateRoute component={NewFanficPage} exact path={NEW_FANFIC_PAGE_ROUTE} />
+          <PrivateRoute component={NewFanficPage} exact path={EDIT_FANFIC_PAGE_ROUTE} />
           <PrivateRoute component={UserPage} exact path={USER_PAGE_ROUTE} />
         </Switch>
       </Router>

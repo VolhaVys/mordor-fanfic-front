@@ -22,7 +22,7 @@ const DashboardPage = () => {
   const token = useSelector(getToken);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/tag_cloud`).then((response) => {
+    axios.get(`${process.env.REACT_APP_API_BASE}/tags/cloud`).then((response) => {
       setTags(response.data);
     }).catch((error) => {
       if (error.response?.status === 403) {

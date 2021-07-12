@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import { SIGN_IN_ROUTE, USER_PAGE_ROUTE } from '../../constant/routs';
 import { getToken, getUserData } from '../../redux/selectors/selector';
 import { logoutAction } from '../../redux/actionCreators/actions';
@@ -43,7 +44,7 @@ const RenderUser = () => {
   if (token) {
     return (
       <Toolbar>
-        <div>{user?.firstName}</div>
+        <Typography gutterBottom variant="body1">{user?.firstName}</Typography>
         <IconButton
           aria-controls="menu-appbar"
           aria-haspopup="true"

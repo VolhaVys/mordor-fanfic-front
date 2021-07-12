@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import { Autocomplete } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,82 +9,143 @@ import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import {
+  CircularProgress, FormControl, InputLabel, MenuItem, Select,
+} from '@material-ui/core';
 import { useStyles } from './styled';
 import Layout from '../../components/layout';
 import { getToken } from '../../redux/selectors/selector';
-import { tags, fandoms, inputs } from './config';
+import { fandoms, inputs } from './config';
 import Chapters from '../../components/chapters';
 import { USER_PAGE_ROUTE } from '../../constant/routs';
 
 const NewFanficPage = () => {
   const classes = useStyles();
-  const { control, handleSubmit } = useForm();
-  const [error, setError] = useState('');
+  const {
+    control, handleSubmit, formState: { errors }, setError,
+  } = useForm();
   const token = useSelector(getToken);
   const history = useHistory();
+  const { fanficId } = useParams();
+  const [fanfic, setFanfic] = useState({});
+  const [isFanficLoad, setFanficLoad] = useState(false);
+  const [tags, setTags] = useState([]);
+
+  const setServerError = (e) => {
+    console.error(e);
+    setError('submit', {
+      type: 'server',
+      message: e.response?.data?.message ?? 'Сервер временно недоступен',
+    });
+  };
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_BASE}/tags`)
+      .then((tagsResponse) => {
+        setTags(tagsResponse.data);
+
+        if (fanficId) {
+          axios.get(`${process.env.REACT_APP_API_BASE}/fanfics/${fanficId}`)
+            .then((response) => {
+              setFanfic(response.data);
+              setFanficLoad(true);
+            }).catch(setServerError);
+        } else {
+          setFanficLoad(true);
+        }
+      }).catch(setServerError);
+  }, []);
 
   const onSubmit = (data) => {
-    axios.post(`${process.env.REACT_APP_API_BASE}/fanfics`, data, { headers: { Authorization: token } })
-      .then((response) => {
-        history.push(USER_PAGE_ROUTE);
-      }).catch((e) => {
-        setError(e.response?.data?.message ?? 'Server is temporarily unavailable');
-      });
+    if (fanficId) {
+      // eslint-disable-next-line no-underscore-dangle
+      data._id = fanficId;
+      axios.put(`${process.env.REACT_APP_API_BASE}/fanfics`, data, { headers: { Authorization: token } })
+        .then(() => {
+          history.goBack();
+        }).catch(setServerError);
+    } else {
+      axios.post(`${process.env.REACT_APP_API_BASE}/fanfics`, data, { headers: { Authorization: token } })
+        .then(() => {
+          history.push(USER_PAGE_ROUTE);
+        }).catch(setServerError);
+    }
   };
 
   return (
     <Layout>
       <Container maxWidth="sm">
+        {!isFanficLoad && <CircularProgress />}
+        {isFanficLoad && (
         <form
           autoComplete="off"
           className={classes.root}
           noValidate
           onSubmit={handleSubmit(onSubmit)}
         >
+          {errors.submit && <Alert severity="error">{errors.submit.message}</Alert>}
           {inputs.map((cfg) => (
             <Controller
               control={control}
-              defaultValue=""
+              defaultValue={fanfic[cfg.name] ?? ''}
               key={cfg.id}
               name={cfg.name}
               render={({ field: { onChange, value } }) => (
                 <TextField
-                  SelectProps={cfg.SelectProps}
                   className={classes.input}
+                  error={!!errors[cfg.name]}
                   id={cfg.id}
                   label={cfg.label}
-                  multiline={cfg.multiline}
+                  multiline={!!cfg.multiline}
                   onChange={onChange}
                   required
-                  select={cfg.select}
+                  rows={cfg.rows}
                   value={value}
-                >
-                  { cfg.id === 'fanfic-fandom'
-                      && fandoms.map((option) => (
-                        <option key={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-
-                </TextField>
-
+                />
               )}
               rules={{ required: true }}
             />
           ))}
+
           <Controller
             control={control}
-            defaultValue=""
+            defaultValue={fanfic.fandom ?? ''}
+            name="fandom"
+            render={({ field: { onChange, value } }) => (
+              <FormControl error={!!errors.fandom}>
+                <InputLabel id="fanfic-fandom-label">Фэндом</InputLabel>
+                <Select
+                  id="fanfic-fandom"
+                  labelId="fanfic-fandom-label"
+                  onChange={onChange}
+                  required
+                  value={value}
+                >
+                  {fandoms.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            rules={{ required: true }}
+          />
+
+          <Controller
+            control={control}
+            defaultValue={fanfic.tags ?? []}
             name="tags"
             render={({ field: { onChange, values } }) => (
               <Autocomplete
                 className={classes.input}
+                defaultValue={fanfic.tags ?? []}
                 freeSolo
                 id="tags-filled"
                 multiple
                 onChange={(_, data) => onChange(data)}
-                options={tags.map((option) => option.title)}
+                options={tags}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -100,10 +161,10 @@ const NewFanficPage = () => {
           />
           <Controller
             control={control}
-            defaultValue=""
+            defaultValue={fanfic.chapters ?? []}
             name="chapters"
             render={({ field: { onChange, value } }) => (
-              <Chapters onChange={onChange} value={value} />
+              <Chapters data={value} onChange={onChange} />
             )}
           />
 
@@ -119,6 +180,7 @@ const NewFanficPage = () => {
             </Button>
           </Box>
         </form>
+        ) }
       </Container>
     </Layout>
   );

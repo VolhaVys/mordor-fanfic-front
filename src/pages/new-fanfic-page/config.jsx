@@ -1,10 +1,3 @@
-export const tags = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-];
-
 export const fandoms = [
   {
     value: 'Гарри Поттер',
@@ -38,15 +31,7 @@ export const inputs = [
     id: 'fanfic-description',
     label: 'Краткое описание',
     name: 'description',
-    multiline: 'multiline',
-  },
-  {
-    id: 'fanfic-fandom',
-    label: 'Фэндом',
-    name: 'fandom',
-    SelectProps: {
-      native: true,
-    },
-    select: true,
+    multiline: true,
+    rows: 3,
   },
 ];

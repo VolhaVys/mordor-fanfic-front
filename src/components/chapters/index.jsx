@@ -12,13 +12,15 @@ import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useStyles } from '../../pages/new-fanfic-page/styled';
 
-const Chapters = ({ onChange }) => {
+const EMPTY_CHAPTERS = [
+  {
+    title: '', text: '', id: uuid(),
+  },
+];
+
+const Chapters = ({ onChange, data }) => {
   const classes = useStyles();
-  const [chapters, setChapters] = useState([
-    {
-      title: '', text: '', id: uuid(),
-    },
-  ]);
+  const [chapters, setChapters] = useState(data.length ? data : EMPTY_CHAPTERS);
 
   useEffect(() => {
     onChange(chapters);
@@ -39,14 +41,6 @@ const Chapters = ({ onChange }) => {
       return c;
     }));
   };
-
-  // combine: null
-  // destination: {droppableId: "chapters", index: 1}
-  // draggableId: "d076ec58-5152-411d-bc71-69b681989206"
-  // mode: "FLUID"
-  // reason: "DROP"
-  // source: {index: 2, droppableId: "chapters"}
-  // type: "DEFAULT"
 
   const moveChapter = (sourceIndex, destinationIndex) => {
     const newChapters = [...chapters];
@@ -133,8 +127,13 @@ const Chapters = ({ onChange }) => {
   );
 };
 
+Chapters.defaultProps = {
+  data: EMPTY_CHAPTERS,
+};
+
 Chapters.propTypes = {
   onChange: PropTypes.func.isRequired,
+  data: PropTypes.array,
 };
 
 export default Chapters;
